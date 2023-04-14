@@ -1,8 +1,8 @@
-import logging
+import logging 
 import requests
 import datetime
 from aiogram import Bot, Dispatcher, executor, types
-from bs4 import BeautifulSoup
+
 
 weather_token = "6e8d79779a0c362f14c60a1c7f363e29"
 
@@ -40,7 +40,7 @@ async def send_welcome(message: types.Message):
 #         await message.reply_photo(photo, caption='Cats are here 😺')
 
 
-@dp.message_handler()
+@dp.message_handler(lambda message: message.text != "music")
 async def echo(message: types.Message):
     r1 = requests.get(
         f"http://api.openweathermap.org/data/2.5/weather?q={message.text}&appid={weather_token}&units=metric")
@@ -54,6 +54,10 @@ async def echo(message: types.Message):
                         f"\U0001F4A7Вологість повітря: {humidity} %\n"
                         f"\U0001F32AВітер: {wind} м/с\n ")
 
+ 
+@dp.message_handler(regexp='music|музыка')
+async def music(message: types.Message):
+    await message.reply('https://www.youtube.com/watch?v=2i2khp_npdE')
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
